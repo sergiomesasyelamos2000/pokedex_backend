@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { environment } from '../environment/environment';
 import { AuthModule } from './modules/auth/auth.module';
-import { UserModule } from './modules/users/user.module';
+import { PokemonModule } from './modules/pokemons/pokemon.module';
 @Module({
   imports: [
-    UserModule,
+    PokemonModule,
     TypeOrmModule.forRoot({
       ...environment.typeormConfig,
     } as TypeOrmModuleOptions),

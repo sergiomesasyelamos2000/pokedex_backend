@@ -21,27 +21,27 @@ import {
     ApiTags,
     ApiUnauthorizedResponse,
   } from '@nestjs/swagger';
-  import { CreateUserDto } from 'shared/dtos/user/user-create.dto';
-  import { GetUserDto } from 'shared/dtos/user/user-get.dto';
-  import { UpdateUserDto } from 'shared/dtos/user/user-update.dto';
-  import { ApiUrls, ApiUserUrls } from 'shared/enums/api-urls.enum';
+import { CreatePokemonDto } from 'shared/dtos/pokemon/pokemon-create.dto';
+import { GetPokemonDto } from 'shared/dtos/pokemon/pokemon-get.dto';
+import { UpdatePokemonDto } from 'shared/dtos/pokemon/pokemon-update.dto';
+import { ApiPokemonUrls, ApiUrls } from 'shared/enums/api-urls.enum';
 import { ControllerAbstract } from 'src/abstracts/abstract.controller';
 import { ResponseBuilderService } from 'src/utilities/services/response-builder.service';
 import { buildFindOneOptions, decryptPassword } from 'src/utilities/Utils';
   import { FindOneOptions } from 'typeorm';
-import { UserEntity } from './user.entity';
-import { UserService } from './user.service';
+import { PokemonEntity } from './pokemon.entity';
+import { PokemonService } from './pokemon.service';
   
   @ApiHeader({
     name: 'Authorization',
-    description: 'Jwt generated when user login',
+    description: 'Jwt generated when pokemon login',
   })
-  @ApiTags('user')
-  @Controller(ApiUrls.API_URL_USER)
-  export class UserController extends ControllerAbstract<UserEntity> {
+  @ApiTags('pokemon')
+  @Controller(ApiUrls.API_URL_POKEMON)
+  export class PokemonController extends ControllerAbstract<PokemonEntity> {
     lang = 'es';
     constructor(
-      private readonly userService: UserService,
+      private readonly pokemonService: PokemonService,
       private readonly responseBuilderService: ResponseBuilderService
     ) {
       super();
@@ -50,58 +50,58 @@ import { UserService } from './user.service';
     @ApiConsumes('application/json')
     @ApiOkResponse({
       status: 200,
-      description: 'Get all Users was successfully completed',
-      type: [UserEntity],
+      description: 'Get all pokemons was successfully completed',
+      type: [PokemonEntity],
     })
     @ApiForbiddenResponse({
       status: 403,
-      description: 'Get all Users failed',
+      description: 'Get all pokemons failed',
     })
     @ApiUnauthorizedResponse({
       status: 401,
-      description: 'User acces token is not present or is invalid',
+      description: 'Pokemon acces token is not present or is invalid',
     })
     @UseGuards(AuthGuard('jwt'))
     @Get()
-    public findAll(@Headers() headers, @Res() response): Promise<UserEntity[]> {
-      return this.userService
+    public findAll(@Headers() headers, @Res() response): Promise<PokemonEntity[]> {
+      return this.pokemonService
         .findAll()
-        .then((users) => {
-          const usersWithoutPassword: GetUserDto[] = [];
+        .then((pokemons) => {
+          const pokemonsWithoutPassword: GetPokemonDto[] = [];
   
-          users.forEach((user) => {
-            const userWithoutPassword: GetUserDto = {
-              id: user.id.toString(),
-              img: user.img,
-              name: user.name,
-              type: user.type,
-              ability: user.ability,
-              speed: user.speed,
-              weight: user.weight,
-              height: user.height,
-              description: user.description,
-              email: user.email
+          pokemons.forEach((pokemon) => {
+            const pokemonWithoutPassword: GetPokemonDto = {
+              id: pokemon.id.toString(),
+              img: pokemon.img,
+              name: pokemon.name,
+              type: pokemon.type,
+              ability: pokemon.ability,
+              speed: pokemon.speed,
+              weight: pokemon.weight,
+              height: pokemon.height,
+              description: pokemon.description,
+              email: pokemon.email
             };
-            usersWithoutPassword.push(userWithoutPassword);
+            pokemonsWithoutPassword.push(pokemonWithoutPassword);
           });
   
-          return response.status(HttpStatus.OK).json(usersWithoutPassword);
+          return response.status(HttpStatus.OK).json(pokemonsWithoutPassword);
         })
     }
   
     @ApiConsumes('application/json')
     @ApiOkResponse({
       status: 200,
-      description: 'Get user by property was successfully completed',
-      type: UserEntity,
+      description: 'Get pokemon by property was successfully completed',
+      type: PokemonEntity,
     })
     @ApiForbiddenResponse({
       status: 403,
-      description: 'Get user by property failed',
+      description: 'Get pokemon by property failed',
     })
     @ApiUnauthorizedResponse({
       status: 401,
-      description: 'User acces token is not present or is invalid',
+      description: 'Pokemon acces token is not present or is invalid',
     })
     @ApiParam({
       name: 'propertie',
@@ -112,62 +112,62 @@ import { UserService } from './user.service';
         "Param extracted from URL, it's used has a filter in the query to db",
     })
     @UseGuards(AuthGuard('jwt'))
-    @Get(ApiUserUrls.API_URL_USER_BY_PROPERTIE)
+    @Get(ApiPokemonUrls.API_URL_POKEMON_BY_PROPERTIE)
     public findByPropertie(
       @Headers() headers,
   
       @Param('propertie') propertie: string,
       @Res() response,
-    ): Promise<UserEntity> {
+    ): Promise<PokemonEntity> {
       const propertieObject: FindOneOptions = buildFindOneOptions(propertie);
-      return this.userService
+      return this.pokemonService
         .findByPropertie(propertieObject)
-        .then((user) => {
-          const userWithoutPassword: GetUserDto = {
-            id: user.id.toString(),
-            img: user.img,
-            name: user.name,
-            type: user.type,
-            ability: user.ability,
-            speed: user.speed,
-            weight: user.weight,
-            height: user.height,
-            description: user.description,
-            email: user.email
+        .then((pokemon) => {
+          const pokemonWithoutPassword: GetPokemonDto = {
+            id: pokemon.id.toString(),
+            img: pokemon.img,
+            name: pokemon.name,
+            type: pokemon.type,
+            ability: pokemon.ability,
+            speed: pokemon.speed,
+            weight: pokemon.weight,
+            height: pokemon.height,
+            description: pokemon.description,
+            email: pokemon.email
           };
-          return response.status(HttpStatus.OK).json(userWithoutPassword);
+          return response.status(HttpStatus.OK).json(pokemonWithoutPassword);
         })
     }
   
     @ApiConsumes('application/json')
     @ApiOkResponse({
       status: 200,
-      description: 'Create user was successfully completed',
-      type: UserEntity,
+      description: 'Create pokemon was successfully completed',
+      type: PokemonEntity,
     })
     @ApiForbiddenResponse({
       status: 403,
-      description: 'Create user failed',
+      description: 'Create pokemon failed',
     })
     @ApiUnauthorizedResponse({
       status: 401,
-      description: 'User acces token is not present or is invalid',
+      description: 'pokemon acces token is not present or is invalid',
     })
     @ApiParam({
       name: 'body',
-      type: CreateUserDto,
+      type: CreatePokemonDto,
       required: true,
-      description: 'User to save on the db',
+      description: 'pokemon to save on the db',
     })
     @Post()
     public create(
       @Headers() headers,
-      @Body() body: CreateUserDto,
+      @Body() body: CreatePokemonDto,
       @Res() response,
-    ): Promise<UserEntity> {
+    ): Promise<PokemonEntity> {
       body.password = decryptPassword(body.password);
       return this.responseBuilderService.buildPromiseResponse(
-        this.userService.create(body),
+        this.pokemonService.create(body),
         response,
         HttpStatus.CREATED,
         HttpStatus.FORBIDDEN,
@@ -178,32 +178,32 @@ import { UserService } from './user.service';
     @ApiConsumes('application/json')
     @ApiOkResponse({
       status: 200,
-      description: 'Delete user was successfully completed',
+      description: 'Delete pokemon was successfully completed',
       type: String,
     })
     @ApiForbiddenResponse({
       status: 403,
-      description: 'Delete user failed',
+      description: 'Delete pokemon failed',
     })
     @ApiUnauthorizedResponse({
       status: 401,
-      description: 'User acces token is not present or is invalid',
+      description: 'pokemon acces token is not present or is invalid',
     })
     @ApiParam({
       name: 'id',
       type: Number,
       required: true,
-      description: 'Id of the user to delete from the db',
+      description: 'Id of the pokemon to delete from the db',
     })
     @UseGuards(AuthGuard('jwt'))
-    @Delete(ApiUserUrls.API_URL_USER_DELETE)
+    @Delete(ApiPokemonUrls.API_URL_POKEMON_DELETE)
     public delete(
       @Headers() headers,
-      @Param('id') userId: number,
+      @Param('id') pokemonId: number,
       @Res() response,
-    ): Promise<UserEntity> {
+    ): Promise<PokemonEntity> {
       return this.responseBuilderService.buildPromiseResponse(
-        this.userService.delete(userId),
+        this.pokemonService.delete(pokemonId),
         response,
         HttpStatus.OK,
         HttpStatus.FORBIDDEN,
@@ -214,43 +214,43 @@ import { UserService } from './user.service';
     @ApiConsumes('application/json')
     @ApiOkResponse({
       status: 200,
-      description: 'Update user was successfully completed',
-      type: UserEntity,
+      description: 'Update pokemon was successfully completed',
+      type: PokemonEntity,
     })
     @ApiForbiddenResponse({
       status: 403,
-      description: 'Update user failed',
+      description: 'Update pokemon failed',
     })
     @ApiUnauthorizedResponse({
       status: 401,
-      description: 'User acces token is not present or is invalid',
+      description: 'pokemon acces token is not present or is invalid',
     })
     @ApiParam({
       name: 'id',
       type: Number,
       required: true,
-      description: 'Id of the user to update',
+      description: 'Id of the pokemon to update',
     })
     @ApiParam({
       name: 'body',
-      type: UpdateUserDto,
+      type: UpdatePokemonDto,
       required: true,
-      description: 'User data modified',
+      description: 'pokemon data modified',
     })
     @UseGuards(AuthGuard('jwt'))
-    @Put(ApiUserUrls.API_URL_USER_UPDATE)
+    @Put(ApiPokemonUrls.API_URL_POKEMON_UPDATE)
     public update(
       @Headers() headers,
       @Param('id') id: number,
-      @Body() body: UpdateUserDto,
+      @Body() body: UpdatePokemonDto,
       @Res() response,
-    ): Promise<UserEntity> {
+    ): Promise<PokemonEntity> {
       const propertieObject: FindOneOptions = buildFindOneOptions(`${id}`);
       if (body?.password) {
         body.password = decryptPassword(body?.password);
       }
       return this.responseBuilderService.buildPromiseResponse(
-        this.userService.update(propertieObject, body),
+        this.pokemonService.update(propertieObject, body),
         response,
         HttpStatus.OK,
         HttpStatus.FORBIDDEN,

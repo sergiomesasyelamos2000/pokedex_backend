@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UserLoginDto {
+export class PokemonLoginDto {
   @ApiProperty({
-    description: 'Email for entity user',
+    description: 'Email for entity pokemon',
     type: String,
     example: 'hello@world.com',
   })
   email: string;
 
   @ApiProperty({
-    description: 'Password for entity user',
+    description: 'Password for entity pokemon',
     type: String,
     example: 'P@ssw0rd',
   })

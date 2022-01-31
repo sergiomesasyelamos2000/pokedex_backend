@@ -1,12 +1,12 @@
 export enum ApiUrls {
     BASE = 'api/v1',
     API_URL_LOGIN = '/login',
-    API_URL_USER = '/user',
+    API_URL_POKEMON = '/pokemon',
   }
   
-  export enum ApiUserUrls {
-    API_URL_USER_BY_PROPERTIE = '/:propertie',
-    API_URL_USER_DELETE = '/:id',
-    API_URL_USER_UPDATE = '/:id',
+  export enum ApiPokemonUrls {
+    API_URL_POKEMON_BY_PROPERTIE = '/:propertie',
+    API_URL_POKEMON_DELETE = '/:id',
+    API_URL_POKEMON_UPDATE = '/:id',
   }
   

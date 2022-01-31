@@ -1,11 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
-import { User } from 'shared/interface/user.model';
 import { crypt } from 'src/utilities/Utils';
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class UserEntity  {
+export class PokemonEntity  {
   @ApiProperty({ example: '1234' })
   @PrimaryGeneratedColumn()
   id: number;

@@ -15,7 +15,7 @@ import {
     ApiTags,
   } from '@nestjs/swagger';
   import { AccessToken } from 'shared/dtos/auth/access-token.model';
-  import { UserLoginDto } from 'shared/dtos/user/user-login.dto';
+import { PokemonLoginDto } from 'shared/dtos/pokemon/pokemon-login.dto';
   import { ApiUrls } from 'shared/enums/api-urls.enum';
   import { ResponseBuilderService } from 'src/utilities/services/response-builder.service';
   import { decryptPassword } from 'src/utilities/Utils';
@@ -35,8 +35,8 @@ import {
   
     @ApiConsumes('application/json')
     @ApiBody({
-      description: 'User login data',
-      type: UserLoginDto,
+      description: 'Poekmon login data',
+      type: PokemonLoginDto,
     })
     @ApiOkResponse({
       status: 200,
@@ -47,13 +47,13 @@ import {
     @Post()
     async login(
       @Headers() headers,
-      @Body() userLogin: UserLoginDto,
+      @Body() pokemonLogin: PokemonLoginDto,
       @Res() response,
     ): Promise<AccessToken> {
-      userLogin.password = decryptPassword(userLogin.password);
+      pokemonLogin.password = decryptPassword(pokemonLogin.password);
       if (
         await this.authService
-          .validateUser(userLogin.email, userLogin.password)
+          .validatePokemon(pokemonLogin.email, pokemonLogin.password)
           .then((res) => {
             return true;
           })
@@ -62,7 +62,7 @@ import {
           })
       ) {
         return this.responseBuilderService.buildPromiseResponse(
-          this.authService.generateAccessToken(userLogin.email),
+          this.authService.generateAccessToken(pokemonLogin.email),
           response,
           HttpStatus.OK,
           HttpStatus.FORBIDDEN,

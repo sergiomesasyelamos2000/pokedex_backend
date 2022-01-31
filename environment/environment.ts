@@ -5,7 +5,7 @@ export const environment = {
       port: '3306',
       username: 'root',
       password: 'root',
-      database: 'user_login_app',
+      database: 'app_pokedex',
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     },

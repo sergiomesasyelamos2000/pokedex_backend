@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ApiUrls } from 'shared/enums/api-urls.enum';
 import { AppModule } from './app.module';
-import { cargarPokemon } from './modules/users/insertDtoPokemon';
+import { cargarPokemon } from './modules/pokemons/insertDtoPokemon';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

@@ -1,6 +1,6 @@
 import { getConnection } from "typeorm";
-import { UserEntity } from './user.entity';
 import { environment } from '../../../environment/environment';
+import { PokemonEntity } from "./pokemon.entity";
 
 // Con esto se mete los pokemon una vez
 var xlsx = require('node-xlsx');
@@ -15,7 +15,7 @@ export function cargarPokemon(){
     const insertPokemon = getConnection()
     .createQueryBuilder()
     .insert()
-    .into(UserEntity)
+    .into(PokemonEntity)
     .values([
         { img: environment.url.img+obj[0].data[i][0],
             email: obj[0].data[i][1],

@@ -1,23 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../../interface/user.model';
 
-export class CreateUserDto {
+export class CreatePokemonDto {
   @ApiProperty({
-    description: 'Email for entity user',
+    description: 'Email for entity pokemon',
     type: String,
     example: 'prueba@gmail.com',
   })
   email: string;
 
   @ApiProperty({
-    description: 'Name for entity user',
+    description: 'Name for entity pokemon',
     type: String,
     example: 'Sergio',
   })
   name: string;
 
   @ApiProperty({
-    description: 'Password for entity user',
+    description: 'Password for entity pokemon',
     type: String,
     example: 'Contrasena',
   })
@@ -28,14 +27,14 @@ export class CreateUserDto {
 
 
   @ApiProperty({
-    description: 'Img for entity user',
+    description: 'Img for entity pokemon',
     type: String,
     example: 'Mesas',
   })
   img: string;
 
   @ApiProperty({
-    description: 'Surname for entity user',
+    description: 'Surname for entity pokemon',
     type: String,
     example: 'Mesas',
   })
